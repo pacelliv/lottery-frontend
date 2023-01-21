@@ -125,7 +125,7 @@ function LotteryEntrance() {
                 </div>
             ) : (
                 <div>
-                    <p>Invalid address</p>
+                    <p>No address detected</p>
                 </div>
             )}
         </div>
