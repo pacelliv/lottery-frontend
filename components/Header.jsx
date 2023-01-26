@@ -1,12 +1,13 @@
+import styles from "@/styles/Home.module.css"
 import { ConnectButton } from "web3uikit"
 
 function Header() {
     return (
-        <div className="p-5 border-b-2 flex flex-row">
-            <h1 className="py-4 px-4 font-bold text-3xl">
-                Decentralized Lottery
-            </h1>
-            <div className="ml-auto py-2 px-4">
+        <div className={styles.header}>
+            <div>
+                <h3>Super Raffle</h3>
+            </div>
+            <div>
                 <ConnectButton moralisAuth={false} />
             </div>
         </div>

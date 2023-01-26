@@ -1,27 +1,26 @@
-import { useWeb3Contract } from "react-moralis"
+import styles from "@/styles/Home.module.css"
+import { useMoralis, useWeb3Contract } from "react-moralis"
 import { abi, contractAddresses } from "../constants"
-import { useMoralis } from "react-moralis"
 import { useEffect, useState } from "react"
 import { ethers } from "ethers"
 import { useNotification } from "web3uikit"
 
 function LotteryEntrance() {
     // Moralis knows the chainId because the Header components passes up all the information
-    // about Metamask to the MoralisProvider and the this providers passes down that information
+    // about Metamask to the MoralisProvider and then the provider passes down that information
     // to all the components.
     const { chainId: chainIdHex, isWeb3Enabled } = useMoralis()
     const chainId = parseInt(chainIdHex)
     const raffleAddress =
         chainId in contractAddresses ? contractAddresses[chainId][0] : null
-
     const [entranceFee, setEntranceFee] = useState("0")
-    const [numPlayers, setNumPlayers] = useState("0")
     const [recentWinner, setRecentWinner] = useState("0")
-
+    const [numPlayers, setNumPlayers] = useState("0")
     const dispatch = useNotification()
 
     const {
         runContractFunction: enterRaffle,
+        data: enterTxResponse,
         isFetching,
         isLoading,
     } = useWeb3Contract({
@@ -30,13 +29,6 @@ function LotteryEntrance() {
         functionName: "enterRaffle",
         params: {},
         msgValue: entranceFee,
-    })
-
-    const { runContractFunction: getNumberOfPlayers } = useWeb3Contract({
-        abi: abi,
-        contractAddress: raffleAddress,
-        functionName: "getNumberOfPlayers",
-        params: {},
     })
 
     const { runContractFunction: getEntranceFee } = useWeb3Contract({
@@ -53,14 +45,31 @@ function LotteryEntrance() {
         params: {},
     })
 
-    async function updateUI() {
+    const { runContractFunction: getNumberOfPlayers } = useWeb3Contract({
+        abi: abi,
+        contractAddress: raffleAddress,
+        functionName: "getNumberOfPlayers",
+        params: {},
+    })
+
+    const updateUI = async () => {
+        // Another way we could make a contract call:
+        // const options = { abi, contractAddress: raffleAddress }
+        // const fee = await Moralis.executeFunction({
+        //     functionName: "getEntranceFee",
+        //     ...options,
+        // })
         const entranceFeeFromCall = (await getEntranceFee()).toString()
-        const numPlayersFromCall = (await getNumberOfPlayers()).toString()
         const recentWinnerFromCall = (await getRecentWinner()).toString()
+        const numPlayersFromCall = (await getNumberOfPlayers()).toString()
         setEntranceFee(entranceFeeFromCall)
-        setNumPlayers(numPlayersFromCall)
         setRecentWinner(recentWinnerFromCall)
+        setNumPlayers(numPlayersFromCall)
     }
+
+    window.addEventListener("resize", () => {
+        console.log(window.innerWidth)
+    })
 
     useEffect(() => {
         if (isWeb3Enabled) {
@@ -68,10 +77,25 @@ function LotteryEntrance() {
         }
     }, [isWeb3Enabled])
 
+    // An example filter for listening for events:
+    // const filter = {
+    //     address: raffleAddress,
+    //     topics: [
+    //         // the name of the event, parentheses containing the data type of each event, no spaces
+    //         ethers.utils.id("RaffleEnter(address)"),
+    //     ],
+    // }
+
+    // console.log(filter.topics)
+
     const handleSuccess = async (tx) => {
-        await tx.wait(1)
-        handleNewNotificacion(tx)
-        updateUI()
+        try {
+            await tx.wait(1)
+            handleNewNotificacion(tx)
+            updateUI()
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleNewNotificacion = () => {
@@ -84,21 +108,11 @@ function LotteryEntrance() {
         })
     }
 
-    /**
-     * Challenge:
-     *
-     * Instead of using a onSuccess/handleSuccess I should find a way to code an event
-     * listener so when the winner of the raffle is picked my UI is automaticlaly updated.
-     * Currently, I need to manually refresh the page to see the address of the winner.
-     */
-
     return (
-        <div className="p-5">
-            <h3>Hello from LotteryEntrance</h3>
+        <div className={styles.entrance}>
             {raffleAddress ? (
-                <div>
+                <div className={styles.entranceRaffle}>
                     <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto"
                         onClick={async () => {
                             await enterRaffle({
                                 // this onSuccess method doesn't check if the transaction has block confirmations,
@@ -111,17 +125,26 @@ function LotteryEntrance() {
                         disabled={isFetching || isLoading}
                     >
                         {isFetching || isLoading ? (
-                            <div className="animate-spin spinner-border h-8 w-8 border-b-2 rounded-full"></div>
+                            <div className={styles.loader}></div>
                         ) : (
-                            <div>Enter Raffle</div>
+                            "Enter Raffle"
                         )}
                     </button>
-                    <p>
-                        Entrance Fee:{" "}
-                        {ethers.utils.formatUnits(entranceFee, "ether")} ETH
-                    </p>
-                    <p>Number of players: {numPlayers}</p>
-                    <p>Recent winner: {recentWinner}</p>
+                    <div className={styles.containerStats}>
+                        <p>
+                            Pool:{" "}
+                            {ethers.utils.formatUnits(
+                                (parseInt(entranceFee) * numPlayers).toString(),
+                                "ether"
+                            )}{" "}
+                            ETH
+                        </p>
+                        <p>Number of players: {numPlayers}</p>
+                        <p>
+                            Last winner: {recentWinner.slice(0, 6)}...
+                            {recentWinner.slice(recentWinner.length - 4)}
+                        </p>
+                    </div>
                 </div>
             ) : (
                 <div>
