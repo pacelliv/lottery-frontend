@@ -5,9 +5,7 @@ const Navbar = () => {
     return (
         <div className={navbarStyles.navbar}>
             <p className={navbarStyles.logo}>Super Raffle</p>
-            <div className={navbarStyles.connectButton}>
-                <ConnectButton moralisAuth={false} />
-            </div>
+            <ConnectButton moralisAuth={false} />
         </div>
     )
 }
