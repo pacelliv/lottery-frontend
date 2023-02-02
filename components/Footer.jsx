@@ -1,12 +1,10 @@
-import styles from "@/styles/Home.module.css"
+import Link from "next/link"
+import footerStyles from "../src/styles/Footer.module.css"
 
-function Footer() {
+const Footer = () => {
     return (
-        <div className={styles.footer}>
-            <a
-                href="https://github.com/pacelliv/smartcontract-lottery"
-                target="_blank"
-            >
+        <div className={footerStyles.footer}>
+            <a href="https://github.com/pacelliv" target="_blank">
                 <img src="../images/github-logo.png" />
             </a>
             <a href="https://twitter.com/pacelliv3" target="_blank">
