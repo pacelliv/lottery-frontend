@@ -59,16 +59,10 @@
 .warningContainer {
     width: 100%;
     margin: 0 auto;
-    font-size: 1rem;
-    line-height: 1.4;
-}
-
-.warningContainer {
-    margin: 0 auto;
     background-color: rgb(235, 245, 248);
     border-radius: 7px;
-    padding: 0.4em 1em 1em;
-    width: 95%;
+    padding: 0.4em 0em 1em 0em;
+    width: 96%;
     font-size: 0.85rem;
     display: flex;
     justify-content: center;
