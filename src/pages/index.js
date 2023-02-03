@@ -1,5 +1,4 @@
 import EnterRaffle from "components/EnterRaffle"
-
 import homeStyles from "../styles/Home.module.css"
 
 const Home = () => {

@@ -1,48 +1,83 @@
-.toastContent {
-    background-color: rgb(235, 245, 248);
-    padding: 1.1em 2.2em 1.1em 1.8em;
-    border-radius: 7px;
-    position: relative;
-    margin-bottom: 10px;
+.container {
+    position: fixed;
+    z-index: 10;
+}
+
+.top-right {
+    top: 5rem;
+    right: 1rem;
+    animation: toast-in-top 0.6s;
+}
+
+.notification {
+    background-color: #ece8fc;
     box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.12);
-}
-
-.xmark,
-.tickMark {
-    display: block;
-    margin: 0;
-}
-
-.xmark {
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    cursor: pointer;
-    padding: 0.25em;
-}
-
-.xmark:hover {
-    background-color: rgb(236, 236, 236);
-    border-top-right-radius: 7px;
-}
-
-.xmark:active {
-    background-color: rgb(218, 218, 218);
-}
-
-.tickMark {
-    width: 15px;
-    height: 15px;
+    position: relative;
+    border-radius: 7px;
+    transition: 0.3s ease;
+    padding: 0 1.5em;
 }
 
 .message {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 7px;
+    padding: 0.2em 0.4em 0.2em 0em;
 }
 
-.message span {
+.xmark {
+    width: 19px;
+    height: 19px;
+    position: absolute;
+    right: 0;
+    padding: 0.25em;
+    cursor: pointer;
+    border-top-right-radius: 7px;
+}
+
+.xmark:hover {
+    background-color: rgb(250, 250, 250);
+}
+
+.tickmark {
+    width: 15px;
+    height: 15px;
+}
+
+.text {
     font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.button {
+    display: block;
+    transform: translateX(500px);
+}
+
+@media (min-width: 850px) {
+    .top-right {
+        right: 3rem;
+    }
+}
+
+@media (min-width: 1050px) {
+    .top-right {
+        right: 5rem;
+    }
+}
+
+@media (min-width: 1300px) {
+    .top-right {
+        right: 8rem;
+    }
+}
+
+@keyframes toast-in-top {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0%);
+    }
 }

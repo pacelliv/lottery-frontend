@@ -36,6 +36,18 @@
 
 @media (min-width: 1000px) {
     .navbar {
+        padding: 1em 4em 1em 5em;
+    }
+}
+
+@media (min-width: 1280px) {
+    .navbar {
+        padding: 1em 4em 1em 6em;
+    }
+}
+
+@media (min-width: 1350px) {
+    .navbar {
         padding: 1em 6.5em 1em 7.5em;
     }
 }
