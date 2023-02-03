@@ -22,7 +22,7 @@ function ToastNotification({ closeNotification, on }) {
                         src="../../tick-mark.png"
                     />
                     <p className={notificationStyles.text}>
-                        You entered Supper Raffle
+                        You entered Super Raffle
                     </p>
                 </div>
             </div>
