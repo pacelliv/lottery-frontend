@@ -13,21 +13,6 @@
     font-family: "Aboreto", sans-serif;
 }
 
-.connectButton {
-    color: white;
-}
-
-.connectButton button {
-    display: block;
-    margin-top: 0;
-}
-
-.connectButton span {
-    font-size: 0.8rem;
-    padding: 0em 0.1em;
-    font-family: "Inter Tight", sans-serif;
-}
-
 @media (min-width: 850px) {
     .navbar {
         padding: 1em 2em 1em 3em;
