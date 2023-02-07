@@ -12,6 +12,7 @@ body {
 
 body {
     font-family: "Inter", sans-serif;
+    min-width: 290px;
 }
 
 button {
