@@ -1,6 +1,19 @@
 import enterRaffleStyles from "../src/styles/EnterRaffle.module.css"
 
-function RaffleStats({ entranceFee, numberOfPlayers, recentWinner }) {
+function RaffleStats({
+    entranceFee,
+    numberOfPlayers,
+    recentWinner,
+    raffleState,
+}) {
+    const styles = {
+        width: "15px",
+        height: "15px",
+        borderRadius: "50%",
+        backgroundColor: raffleState === "0" ? "green" : "red",
+        display: "inline-block",
+    }
+
     return (
         <div className={enterRaffleStyles.cardStats}>
             <a href="https://www.ethereum.org/" target="_blank">
@@ -9,6 +22,20 @@ function RaffleStats({ entranceFee, numberOfPlayers, recentWinner }) {
                     src="../images/ethereum-logo.png"
                 />
             </a>
+            <p>
+                Lottery Status:{" "}
+                <span className={enterRaffleStyles.grey}>
+                    {raffleState === "0" ? "Open" : "Close"}
+                </span>{" "}
+                <span
+                    className={
+                        raffleState === "0"
+                            ? enterRaffleStyles.animationOpen
+                            : enterRaffleStyles.animationClose
+                    }
+                    style={styles}
+                ></span>
+            </p>
             <p>
                 Entrance Fee:{" "}
                 <span className={enterRaffleStyles.grey}>
