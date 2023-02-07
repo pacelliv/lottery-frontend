@@ -13,6 +13,7 @@ const EnterRaffle = () => {
     const [entranceFee, setEntranceFee] = useState("0")
     const [numberOfPlayers, setNumberOfPlayers] = useState("0")
     const [recentWinner, setRecentWinner] = useState("0")
+    const [raffleState, setRaffleState] = useState("0")
     const formattedEntranceFee = ethers.utils.formatUnits(entranceFee, "ether")
     const formattedRecentWinner = `${recentWinner.slice(
         0,
@@ -22,7 +23,7 @@ const EnterRaffle = () => {
     const supportedChains = ["5", "31337"]
     const { chainId: chainIdHex, enableWeb3, isWeb3Enabled } = useMoralis()
     const chainId = parseInt(chainIdHex)
-    const raffeAddress =
+    const raffleAddress =
         chainId in contractAddresses ? contractAddresses[chainId][0] : null
 
     const {
@@ -31,7 +32,7 @@ const EnterRaffle = () => {
         isFetching,
     } = useWeb3Contract({
         abi,
-        contractAddress: raffeAddress,
+        contractAddress: raffleAddress,
         functionName: "enterRaffle",
         params: {},
         msgValue: entranceFee,
@@ -39,22 +40,29 @@ const EnterRaffle = () => {
 
     const { runContractFunction: getEntranceFee } = useWeb3Contract({
         abi,
-        contractAddress: raffeAddress,
+        contractAddress: raffleAddress,
         functionName: "getEntranceFee",
         params: {},
     })
 
     const { runContractFunction: getNumberOfPlayers } = useWeb3Contract({
         abi,
-        contractAddress: raffeAddress,
+        contractAddress: raffleAddress,
         functionName: "getNumberOfPlayers",
         params: {},
     })
 
     const { runContractFunction: getRecentWinner } = useWeb3Contract({
         abi,
-        contractAddress: raffeAddress,
+        contractAddress: raffleAddress,
         functionName: "getRecentWinner",
+        params: {},
+    })
+
+    const { runContractFunction: getRaffleState } = useWeb3Contract({
+        abi,
+        contractAddress: raffleAddress,
+        functionName: "getRaffleState",
         params: {},
     })
 
@@ -66,9 +74,12 @@ const EnterRaffle = () => {
         const recentWinnerFromContractCall = (
             await getRecentWinner()
         ).toString()
+        const raffleStateFromContractCall = (await getRaffleState()).toString()
+        console.log(raffleStateFromContractCall)
         setEntranceFee(entranceFeeFromContractCall)
         setNumberOfPlayers(numberOfPlayersFromContractCall)
         setRecentWinner(recentWinnerFromContractCall)
+        setRaffleState(raffleStateFromContractCall)
     }
 
     useEffect(() => {
@@ -89,9 +100,10 @@ const EnterRaffle = () => {
 
     const checkEvents = async () => {
         const provider = await enableWeb3()
-        const raffle = new ethers.Contract(raffeAddress, abi, provider)
+        const raffle = new ethers.Contract(raffleAddress, abi, provider)
 
         raffle.on("RaffleEnter", () => setOn(true))
+        raffle.on("RequestedRaffleWinner", () => updateUI())
         raffle.on("WinnerPicked", () => updateUI())
     }
 
@@ -145,6 +157,7 @@ const EnterRaffle = () => {
                     entranceFee={formattedEntranceFee}
                     numberOfPlayers={numberOfPlayers}
                     recentWinner={formattedRecentWinner}
+                    raffleState={raffleState}
                 />
                 <RaffleDescription />
                 <Logos />
