@@ -75,7 +75,9 @@ const EnterRaffle = () => {
             await getRecentWinner()
         ).toString()
         const raffleStateFromContractCall = (await getRaffleState()).toString()
-        console.log(raffleStateFromContractCall)
+        console.log(
+            `Raffle state from contract: ${raffleStateFromContractCall}`
+        )
         setEntranceFee(entranceFeeFromContractCall)
         setNumberOfPlayers(numberOfPlayersFromContractCall)
         setRecentWinner(recentWinnerFromContractCall)
@@ -132,9 +134,14 @@ const EnterRaffle = () => {
                         >
                             Enter Raffle
                         </button>
-                        <button className={enterRaffleStyles.getEth}>
+
+                        <a
+                            className={enterRaffleStyles.getEth}
+                            href="https://goerlifaucet.com/"
+                            target="_blank"
+                        >
                             Get Testnet ETH
-                        </button>
+                        </a>
                     </div>
                 ) : (
                     <div className={enterRaffleStyles.warningContainer}>
