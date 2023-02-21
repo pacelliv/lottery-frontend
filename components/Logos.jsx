@@ -71,12 +71,6 @@ const Logos = () => {
                         src="../images/moralis-logo.png"
                     />
                 </a>
-                <a href="https://web3uikit.com/" target="_blank">
-                    <img
-                        className={enterRaffleStyles.logo}
-                        src="../web3uikit.svg"
-                    />
-                </a>
             </div>
         </div>
     )
