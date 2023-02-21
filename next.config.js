@@ -3,4 +3,11 @@ const nextConfig = {
     reactStrictMode: true,
 }
 
-module.exports = { nextConfig, images: { loader: "custom" } }
+module.exports = {
+    nextConfig,
+    compiler: {
+        // Enables the styled-components SWC transform
+        styledComponents: true,
+    },
+    images: { loader: "custom" },
+}
